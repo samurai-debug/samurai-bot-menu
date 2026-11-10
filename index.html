@@ -7,19 +7,13 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
     (function () {
+      var link = "https://t.me/mycursorbot_bot?start=menu";
       var path = "/mycursorbot_bot?start=menu";
-      var link = "https://t.me" + path;
       function post(eventType, eventData) {
         var data = eventData || {};
         try {
           if (window.TelegramWebviewProxy && TelegramWebviewProxy.postEvent) {
             TelegramWebviewProxy.postEvent(eventType, JSON.stringify(data));
-            return;
-          }
-        } catch (e) {}
-        try {
-          if (window.external && typeof window.external.notify === "function") {
-            window.external.notify(JSON.stringify({ eventType: eventType, eventData: data }));
             return;
           }
         } catch (e) {}
@@ -31,17 +25,18 @@
       }
       function run() {
         post("web_app_open_tg_link", { path: path });
-        post("web_app_close", {});
         try {
           var tg = window.Telegram && Telegram.WebApp;
-          if (!tg) return;
-          try { tg.openTelegramLink(link); } catch (e) {}
-          try { tg.close(); } catch (e) {}
+          if (tg) {
+            tg.ready();
+            tg.openTelegramLink(link);
+            tg.close();
+          }
         } catch (e) {}
+        post("web_app_close", {});
       }
       run();
-      setTimeout(run, 0);
-      setTimeout(run, 20);
+      setTimeout(run, 30);
     })();
   </script>
 </head>
