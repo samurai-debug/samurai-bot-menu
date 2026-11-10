@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Меню</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: var(--tg-theme-bg-color, #1c1c1e);
+      --btn: var(--tg-theme-secondary-bg-color, #2c2c2e);
+      --text: var(--tg-theme-text-color, #fff);
+      --hint: var(--tg-theme-hint-color, #8e8e93);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 16px 12px 24px;
+    }
+    h1 {
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+      margin: 4px 0 14px;
+      color: var(--hint);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .grid .wide { grid-column: 1 / -1; }
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 14px;
+      background: var(--btn);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 16px 12px;
+      min-height: 52px;
+      cursor: pointer;
+    }
+    button:active { opacity: 0.75; }
+  </style>
+</head>
+<body>
+  <h1>Выберите отчет</h1>
+  <div class="grid">
+    <button class="wide" data-start="yesterday">📊 Вчера</button>
+    <button data-start="this_month">📅 Этот месяц</button>
+    <button data-start="this_month_staff">👥 Этот месяц</button>
+    <button data-start="period">🔎 За период</button>
+    <button data-start="period_staff">👥 Период</button>
+    <button data-start="counted_month">✅ Засчитанные за месяц</button>
+    <button data-start="counted_month_staff">👥 Засчитанные за месяц</button>
+    <button data-start="counted_period">✅ Засчитанные за период</button>
+    <button data-start="counted_period_staff">👥 Засчитанные за период</button>
+  </div>
+  <script>
+    const tg = window.Telegram.WebApp;
+    const bot = "mycursorbot_bot";
+    tg.ready();
+    tg.expand();
+    document.querySelectorAll("button[data-start]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const code = btn.getAttribute("data-start");
+        tg.openTelegramLink("https://t.me/" + bot + "?start=" + code);
+        tg.close();
+      });
+    });
+  </script>
+</body>
+</html>
